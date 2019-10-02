@@ -1,8 +1,8 @@
 import { string } from 'prop-types';
 import React, { PureComponent } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableWithoutFeedback } from 'react-native';
 
-import { C, fetch, STYLE } from '../../common';
+import { C, fetch } from '../../common';
 import Chart from '../Chart/Chart';
 import style from './Ticker.style';
 
@@ -11,13 +11,11 @@ const { BASE, GROUPS } = C;
 class Ticker extends PureComponent {
   static propTypes = {
     base: string,
-    color: string,
     symbol: string.isRequired,
   };
 
   static defaultProps = {
     base: BASE,
-    color: STYLE.ACCENT,
   };
 
   constructor(props) {
@@ -31,13 +29,13 @@ class Ticker extends PureComponent {
   }
 
   componentWillMount() {
-    this.fetch();
+    this.fetch('H');
   }
 
-  async fetch() {
-    const { props: { base, symbol }, state: { group } } = this;
+  async fetch(group) {
+    const { props: { base, symbol } } = this;
 
-    this.setState({ busy: true, error: undefined });
+    this.setState({ busy: true, error: undefined, group });
     const service = `${base}/${symbol}/${group}`;
     const { now, rates } = await fetch({ service }).catch(error => this.setState({ error }));
     this.setState({ busy: false, now, rates });
@@ -59,7 +57,11 @@ class Ticker extends PureComponent {
           <Text style={style.title}>{symbol}</Text>
           <View style={[style.row, style.groups]}>
             { GROUPS.map((item) =>
-              <Text key={item} style={[style.group, group === item && style.groupActive]}>{item}</Text>
+              <TouchableWithoutFeedback onPress={() => this.fetch(item)}>
+                <View>
+                  <Text key={item} style={[style.group, group === item && style.groupActive]}>{item}</Text>
+                </View>
+              </TouchableWithoutFeedback>
             )}
           </View>
         </View>

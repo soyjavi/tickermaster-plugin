@@ -2,6 +2,7 @@ import { bool, number, string } from 'prop-types';
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
+// import { STYLE } from '../../common';
 import style from './Bar.style';
 
 class Bar extends PureComponent {
@@ -23,12 +24,11 @@ class Bar extends PureComponent {
 
     const on = Math.floor((percentage * resolution) / 100);
     const leds = Array.from({ length: resolution }, (value, index) => {
-      return {
-        backgroundColor: busy ? undefined : color,
-        opacity: index <= on ? 0.2 : 1,
-      };
+      let style = { opacity: index > on ? 0.2 : 1 };
+      if (!busy) style.backgroundColor = color;
+
+      return style;
     });
-    console.log({ percentage, resolution, on, o: Math.floor(on) });
 
     return (
       <View style={style.container}>

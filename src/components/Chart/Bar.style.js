@@ -9,6 +9,7 @@ const LED_SIZE = UNIT * 0.8;
 export default StyleSheet.create({
   container: {
     display: 'flex',
+    flexDirection: 'column-reverse',
     justifyContent: 'flex-end',
     height: '100%',
   },
@@ -17,7 +18,6 @@ export default StyleSheet.create({
     backgroundColor: BASE,
     borderRadius: LED_SIZE / 2,
     height: LED_SIZE,
-    // marginTop: LED_SIZE / 4,
     marginTop: 1,
     width: LED_SIZE,
   },

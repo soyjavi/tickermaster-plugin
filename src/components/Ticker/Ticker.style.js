@@ -9,11 +9,6 @@ export default StyleSheet.create({
     opacity: 0.5,
   },
 
-  chart: {
-    height: UNIT * 12.8,
-    backgroundColor: 'orange',
-  },
-
   container: {
     backgroundColor: STYLE.BACKGROUND,
     margin: UNIT,
