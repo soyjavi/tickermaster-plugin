@@ -4,9 +4,11 @@ import { View, Text, TouchableWithoutFeedback } from 'react-native';
 
 import { C, fetch } from '../../common';
 import Chart from '../Chart/Chart';
+import dummyRates from './modules/dummyRates';
 import style from './Ticker.style';
 
 const { BASE, GROUPS } = C;
+const [DEFAULT_GROUP] = GROUPS;
 
 class Ticker extends PureComponent {
   static propTypes = {
@@ -20,32 +22,45 @@ class Ticker extends PureComponent {
 
   constructor(props) {
     super(props);
+    // @TODO: We should get last group from storage
+    const group = DEFAULT_GROUP;
     this.state = {
       busy: false,
       error: undefined,
-      group: 'H',
-      rates: undefined,
+      group,
+      rates: dummyRates(group),
     };
   }
 
   componentWillMount() {
-    this.fetch('H');
+    this.fetch(this.state.group);
   }
 
   async fetch(group) {
-    const { props: { base, symbol } } = this;
+    const { props: { base, symbol }, state } = this;
 
-    this.setState({ busy: true, error: undefined, group });
+    this.setState({
+      busy: true,
+      error: undefined,
+      group,
+      rates: group !== state.group ? dummyRates(group) : state.rates,
+    });
+
     const service = `${base}/${symbol}/${group}`;
     const { now, rates } = await fetch({ service }).catch(error => this.setState({ error }));
-    this.setState({ busy: false, now, rates });
+
+    this.setState({
+      busy: false,
+      now,
+      rates: { ...rates, ...dummyRates(group, Object.keys(rates).length) },
+    });
   }
 
   render() {
     const {
       props: { base, color, symbol },
       state: {
-        busy, error, group, rates = {},
+        error, group, rates = {}, ...state
       },
     } = this;
     const [value = 0.00] = Object.values(rates);
@@ -59,14 +74,22 @@ class Ticker extends PureComponent {
             { GROUPS.map((item) =>
               <TouchableWithoutFeedback onPress={() => this.fetch(item)}>
                 <View>
-                  <Text key={item} style={[style.group, group === item && style.groupActive]}>{item}</Text>
+                  <Text key={item} style={[style.group, group === item && style.groupActive]}>
+                    {item}
+                  </Text>
                 </View>
               </TouchableWithoutFeedback>
             )}
           </View>
         </View>
-        <Text style={style.value}>{value}</Text>
-        <Chart busy={busy} color={color} symbol={symbol} values={rates} />
+        <View style={style.row}>
+          <Text style={style.value}>{value.toFixed(2)}</Text>
+          <Text style={style.symbol}>{base}</Text>
+        </View>
+        <View>
+
+        </View>
+        <Chart {...state} color={color} symbol={symbol} values={rates} />
 
         <Text>{error}</Text>
       </View>

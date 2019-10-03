@@ -11,8 +11,9 @@ export default StyleSheet.create({
 
   container: {
     backgroundColor: STYLE.BACKGROUND,
-    margin: UNIT,
-    padding: 10,
+    padding: UNIT * 2,
+    maxWidth: UNIT * 42,
+    width: '100%',
   },
 
   groups: {
@@ -46,6 +47,13 @@ export default StyleSheet.create({
 
   subtitle: {
     fontSize: UNIT,
+  },
+
+  symbol: {
+    alignSelf: 'flex-end',
+    color: STYLE.LIGHT,
+    fontSize: UNIT,
+    margin: UNIT / 2,
   },
 
   row: {

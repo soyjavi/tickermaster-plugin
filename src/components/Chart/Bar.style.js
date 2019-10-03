@@ -16,9 +16,9 @@ export default StyleSheet.create({
 
   led: {
     backgroundColor: BASE,
-    borderRadius: LED_SIZE / 2,
+    borderRadius: LED_SIZE,
     height: LED_SIZE,
-    marginTop: 1,
+    margin: 1,
     width: LED_SIZE,
   },
 });

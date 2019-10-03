@@ -9,7 +9,6 @@ export default {
   SUCCESS: '#6FEBBB',
   ERROR: '#FB75A1',
   WHITE: '#FFF',
-  // UNIT
+  // UNITS
   UNIT,
-  OFFSET: UNIT * 2,
 };
