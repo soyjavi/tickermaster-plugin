@@ -5,55 +5,40 @@ import { STYLE } from '../../common';
 const { UNIT } = STYLE;
 
 export default StyleSheet.create({
-  busy: {
-    opacity: 0.5,
+  bold: {
+    fontWeight: '900',
+  },
+
+  caption: {
+    fontSize: UNIT,
+    color: STYLE.LIGHT,
+  },
+
+  chart: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: STYLE.UNIT / 2,
   },
 
   container: {
     backgroundColor: STYLE.BACKGROUND,
     padding: UNIT * 2,
-    maxWidth: UNIT * 42,
     width: '100%',
   },
 
-  groups: {
+  flex: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
 
-  group: {
+  progression: {
     backgroundColor: STYLE.BASE,
-    borderRadius: UNIT / 5,
+    borderRadius: UNIT * 0.8,
     color: STYLE.LIGHT,
-    fontSize: UNIT,
-    fontWeight: '900',
-    height: UNIT * 2,
-    marginLeft: UNIT / 5,
-    lineHeight: UNIT * 2,
-    textAlign: 'center',
-    width: UNIT * 2,
-  },
-
-  groupActive: {
-    backgroundColor: STYLE.ACCENT,
-    color: STYLE.WHITE,
-  },
-
-  title: {
-    color: STYLE.LIGHT,
-    fontSize: UNIT * 1.6,
-    fontWeight: '700',
-  },
-
-  subtitle: {
-    fontSize: UNIT,
-  },
-
-  symbol: {
-    alignSelf: 'flex-end',
-    color: STYLE.LIGHT,
-    fontSize: UNIT,
-    margin: UNIT / 2,
+    fontSize: UNIT * 1.2,
+    lineHeight: UNIT * 1.6,
+    marginLeft: UNIT / 2,
+    paddingHorizontal: UNIT / 2,
   },
 
   row: {
@@ -63,11 +48,29 @@ export default StyleSheet.create({
     alignContent: 'center',
   },
 
+  symbol: {
+    alignSelf: 'flex-end',
+    marginLeft: UNIT / 4,
+  },
+
+  title: {
+    color: STYLE.LIGHT,
+    fontSize: UNIT * 1.6,
+  },
+
+
+  low: {
+    color: STYLE.ERROR,
+  },
+
+  high: {
+    color: STYLE.SUCCESS,
+    marginLeft: UNIT / 2,
+  },
+
   value: {
     color: STYLE.WHITE,
     fontSize: UNIT * 3.2,
-    fontWeight: '900',
     height: UNIT * 3.2,
-    marginBottom: UNIT / 2,
   },
 });

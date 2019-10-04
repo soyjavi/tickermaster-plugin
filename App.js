@@ -8,22 +8,21 @@ export default function App() {
   return (
     <View style={{ backgroundColor: STYLE.BACKGROUND, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
       <Ticker symbol="EUR" />
-      <Ticker symbol="BTC" />
-      <Ticker symbol="ETH" />
-      <Ticker symbol="XAU" />
+      <Ticker symbol="THB" />
+      <Ticker base="BTC" symbol="USD" />
+      <Ticker base="XAU" symbol="USD" />
+      <Ticker base="XAG" symbol="USD" />
 
       <Ticker base="EUR" symbol="USD" />
-      <Ticker base="EUR" symbol="BTC" />
-      <Ticker base="EUR" symbol="ETH" />
-      <Ticker base="EUR" symbol="XAU" />
-      <Ticker base="EUR" symbol="XAG" />
       <Ticker base="EUR" symbol="THB" />
-      <Ticker base="EUR" symbol="JPY" />
-      <Ticker base="EUR" symbol="GBP" />
+      <Ticker base="BTC" symbol="EUR" />
+      <Ticker base="XAU" symbol="EUR" />
+      <Ticker base="XAG" symbol="EUR" />
+
+      <Ticker base="BTC" symbol="THB" />
+      <Ticker base="THB" symbol="BTC" />
+      <Ticker base="BTC" symbol="XAU" />
+      <Ticker base="XAU" symbol="BTC" />
     </View>
   );
 }
-
-/*
-
-*/

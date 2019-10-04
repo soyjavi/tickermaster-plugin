@@ -4,7 +4,6 @@ import {
 import React, { PureComponent } from 'react';
 import { Animated, View } from 'react-native';
 
-// import { STYLE } from '../../common';
 import style from './Bar.style';
 
 class Bar extends PureComponent {

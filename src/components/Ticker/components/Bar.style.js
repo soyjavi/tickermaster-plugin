@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-import { STYLE } from '../../common';
+import { STYLE } from '../../../common';
 
 const { BASE, UNIT } = STYLE;
 
-const LED_SIZE = UNIT * 0.8;
+const LED_SIZE = UNIT * 0.6;
 
 export default StyleSheet.create({
   container: {
