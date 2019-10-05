@@ -10,6 +10,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -19,8 +20,13 @@ module.exports = {
   },
   plugins: [
     'react',
+    'react-native',
   ],
   rules: {
+    'max-len': [1, 120, { 'tabWidth': 2, 'ignoreComments': true }],
     'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
+    'react/jsx-fragments': [0],
+    'react/jsx-props-no-spreading': [1],
+    'react/static-property-placement': [0],
   },
 };
