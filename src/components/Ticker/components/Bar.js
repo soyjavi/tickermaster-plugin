@@ -66,8 +66,8 @@ class Bar extends PureComponent {
       <ConsumerData>
         { (context) => (
           <View
-            onMouseEnter={() => onEnter(context)}
-            onMouseLeave={() => onLeave(context)}
+            onMouseEnter={percentage ? () => onEnter(context) : undefined}
+            onMouseLeave={percentage ? () => onLeave(context) : undefined}
             style={style.container}
           >
             { leds.map((styleCustom, index) =>

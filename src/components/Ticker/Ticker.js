@@ -4,7 +4,9 @@ import { View, Text } from 'react-native';
 
 import { C, fetch, STYLE } from '../../common';
 import { Bar, GroupBy } from './components';
-import { dimensions, dummyRates, fixed } from './modules';
+import {
+  dimensions, dummyRates, fixed, formatDate,
+} from './modules';
 import { ConsumerData, ProviderData } from './context/data';
 import style from './Ticker.style';
 
@@ -54,8 +56,6 @@ class Ticker extends PureComponent {
 
     const service = `${base}/${symbol}/${group}`;
     const response = await fetch({ service }).catch((error) => this.setState({ error }));
-
-    console.log({ response });
     this.setState({
       busy: false,
       ...response,
@@ -78,8 +78,6 @@ class Ticker extends PureComponent {
     const filtered = values.filter((rate) => rate > 0);
     let color = filtered[0] < filtered[filtered.length - 1] ? STYLE.SUCCESS : STYLE.ERROR;
     if (busy) color = STYLE.BASE;
-
-    console.log('<Ticker>');
 
     return (
       <ProviderData>
@@ -121,7 +119,7 @@ class Ticker extends PureComponent {
           <ConsumerData>
             { ({ rate: { timestamp, value } = {} }) => (
               <View style={style.row}>
-                <Text style={[style.caption, style.flex]}>{busy ? 'Updating...' : timestamp || now}</Text>
+                <Text style={[style.caption, style.flex]}>{busy ? 'Updating...' : formatDate(timestamp || now)}</Text>
                 { !busy && !timestamp && (
                   <Fragment>
                     <Text style={[style.caption, style.bold, style.low]}>{`▼${fixed(low)}`}</Text>
@@ -131,8 +129,8 @@ class Ticker extends PureComponent {
 
                 { !busy && timestamp && (
                   <View style={style.row}>
-                    <Text style={[style.caption, style.bold]}>{value}</Text>
-                    <Text style={style.caption}>{symbol}</Text>
+                    <Text style={[style.caption, style.bold]}>{fixed(value)}</Text>
+                    <Text style={[style.caption, style.symbol]}>{symbol}</Text>
                   </View>
                 )}
               </View>

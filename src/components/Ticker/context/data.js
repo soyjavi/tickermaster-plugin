@@ -1,12 +1,12 @@
 import { node } from 'prop-types';
-import React, { Component, createContext } from 'react';
+import React, { PureComponent, createContext } from 'react';
 
 import { C } from '../../../common';
 
 const { PKG: { NAME } } = C;
 const { Provider, Consumer: ConsumerData } = createContext(`${NAME}:ticker:data`);
 
-class ProviderData extends Component {
+class ProviderData extends PureComponent {
   static propTypes = {
     children: node.isRequired,
   };
