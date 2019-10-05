@@ -13,20 +13,19 @@ export default StyleSheet.create({
   },
 
   item: {
-    backgroundColor: STYLE.BASE,
-    borderRadius: UNIT / 5,
     color: STYLE.LIGHT,
     fontSize: UNIT,
     fontWeight: '900',
     height: UNIT * 2,
-    marginLeft: UNIT / 5,
     lineHeight: UNIT * 2,
+    opacity: 0.25,
     textAlign: 'center',
     width: UNIT * 2,
   },
 
   active: {
-    backgroundColor: STYLE.LIGHT,
-    color: STYLE.BASE,
+    backgroundColor: STYLE.BASE,
+    borderRadius: UNIT / 5,
+    opacity: 1,
   },
 });
