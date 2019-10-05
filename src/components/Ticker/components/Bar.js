@@ -1,45 +1,45 @@
-import {
-  bool, func, number, string,
-} from 'prop-types';
+import { bool, number, string } from 'prop-types';
 import React, { PureComponent } from 'react';
 import { Animated, View } from 'react-native';
 
+import { ConsumerData } from '../context/data';
 import style from './Bar.style';
 
 class Bar extends PureComponent {
   static propTypes = {
     busy: bool,
     color: string.isRequired,
-    onEnter: func,
-    onLeave: func,
     percentage: number,
     resolution: number.isRequired,
+    timestamp: string.isRequired,
+    value: number.isRequired,
   };
 
   static defaultProps = {
     busy: false,
     percentage: undefined,
-    onEnter() {},
-    onLeave() {},
   };
 
-  state = {
-    over: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = { over: false };
+  }
 
-  onEnter = () => {
-    const { state, props: { onEnter } } = this;
+  onEnter = ({ onRate }) => {
+    const { props: { timestamp, value }, state } = this;
+
     if (!state.over) {
       this.setState({ over: true });
-      // onEnter();
+      onRate({ timestamp, value });
     }
   }
 
-  onLeave = () => {
-    const { state, props: { onLeave } } = this;
+  onLeave = ({ onRate }) => {
+    const { state } = this;
+
     if (state.over) {
       this.setState({ over: false });
-      // onLeave();
+      onRate(undefined);
     }
   }
 
@@ -54,7 +54,7 @@ class Bar extends PureComponent {
 
     const on = Math.floor((percentage * resolution) / 100);
     const leds = Array.from({ length: resolution }, (value, index) => {
-      let style = { opacity: index > on ? 0.15 : 1 };
+      const style = { opacity: index > on ? 0.15 : 1 };
 
       if (over) style.opacity = index > on ? 0.3 : 1;
       if (!busy && percentage >= 0) style.backgroundColor = color;
@@ -63,11 +63,18 @@ class Bar extends PureComponent {
     });
 
     return (
-      <View onMouseEnter={onEnter} onMouseLeave={onLeave} style={style.container}>
-        { leds.map((styleCustom, index) =>
-          <View key={index.toString()} style={[style.led, styleCustom]} />
+      <ConsumerData>
+        { (context) => (
+          <View
+            onMouseEnter={() => onEnter(context)}
+            onMouseLeave={() => onLeave(context)}
+            style={style.container}
+          >
+            { leds.map((styleCustom, index) =>
+              <View key={index.toString()} style={[style.led, styleCustom]} />)}
+          </View>
         )}
-      </View>
+      </ConsumerData>
     );
   }
 }

@@ -1,10 +1,11 @@
 import { string } from 'prop-types';
 import React, { Fragment, PureComponent } from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { C, fetch, STYLE } from '../../common';
 import { Bar, GroupBy } from './components';
 import { dimensions, dummyRates, fixed } from './modules';
+import { ConsumerData, ProviderData } from './context/data';
 import style from './Ticker.style';
 
 const { BASE, GROUPS } = C;
@@ -37,7 +38,8 @@ class Ticker extends PureComponent {
   }
 
   componentWillMount() {
-    this.fetch(this.state.group);
+    const { state: { group } } = this;
+    this.fetch(group);
   }
 
   async fetch(group) {
@@ -51,7 +53,7 @@ class Ticker extends PureComponent {
     });
 
     const service = `${base}/${symbol}/${group}`;
-    const response = await fetch({ service }).catch(error => this.setState({ error }));
+    const response = await fetch({ service }).catch((error) => this.setState({ error }));
 
     console.log({ response });
     this.setState({
@@ -61,67 +63,85 @@ class Ticker extends PureComponent {
     });
   }
 
-
   render() {
     const {
       props: { base, symbol },
       state: {
-        busy, error, group, now, progression = 0, low = 0, high = 0, rates = {}, ...state
+        busy, error, group, now, progression = 0, low = 0, high = 0, rates = {},
       },
     } = this;
     const { maxWidth, resolution } = dimensions();
     const values = Object.values(rates).reverse();
+    const timestamps = Object.keys(rates).reverse();
     const lastValue = values[values.length - 1] || 0;
 
-    const filtered = values.filter(rate => rate > 0);
+    const filtered = values.filter((rate) => rate > 0);
     let color = filtered[0] < filtered[filtered.length - 1] ? STYLE.SUCCESS : STYLE.ERROR;
     if (busy) color = STYLE.BASE;
 
+    console.log('<Ticker>');
+
     return (
-      <View style={[style.container, { maxWidth }]}>
-        <View style={style.row}>
-          <Text style={[style.title, style.bold]}>{base}{symbol}</Text>
-          <Text style={[
-            style.progression,
-            style.bold,
-            !busy && progression > 0 && style.high,
-            !busy && progression < 0 && style.low,
-          ]}>
-            {progression.toFixed(2)}%
-          </Text>
+      <ProviderData>
+        <View style={[style.container, { maxWidth }]}>
+          <View style={style.row}>
+            <Text style={[style.title, style.bold]}>{`${base}${symbol}`}</Text>
+            <Text
+              style={[
+                style.progression,
+                style.bold,
+                !busy && progression > 0 && style.high,
+                !busy && progression < 0 && style.low,
+              ]}
+            >
+              {`${progression.toFixed(2)}%`}
+            </Text>
+            <GroupBy current={group} onChange={(item) => this.fetch(item)} />
+          </View>
 
-          <GroupBy current={group} onChange={item => this.fetch(item)} />
+          <View style={style.row}>
+            <Text style={[style.value, style.bold]}>{fixed(lastValue)}</Text>
+            <Text style={[style.caption, style.symbol]}>{symbol}</Text>
+          </View>
+
+          <View style={style.chart}>
+            { values.map((value, index) => (
+              <Bar
+                busy={busy}
+                color={color}
+                key={index.toString()}
+                percentage={value > 0 ? ((value - low) * 100) / (high - low) : undefined}
+                resolution={resolution}
+                timestamp={timestamps[index]}
+                value={value}
+              />
+            ))}
+          </View>
+
+          <ConsumerData>
+            { ({ rate: { timestamp, value } = {} }) => (
+              <View style={style.row}>
+                <Text style={[style.caption, style.flex]}>{busy ? 'Updating...' : timestamp || now}</Text>
+                { !busy && !timestamp && (
+                  <Fragment>
+                    <Text style={[style.caption, style.bold, style.low]}>{`▼${fixed(low)}`}</Text>
+                    <Text style={[style.caption, style.bold, style.high]}>{`▲${fixed(high)}`}</Text>
+                  </Fragment>
+                )}
+
+                { !busy && timestamp && (
+                  <View style={style.row}>
+                    <Text style={[style.caption, style.bold]}>{value}</Text>
+                    <Text style={style.caption}>{symbol}</Text>
+                  </View>
+                )}
+              </View>
+            )}
+          </ConsumerData>
+
+          <Text>{error}</Text>
         </View>
-
-        <View style={style.row}>
-          <Text style={[style.value, style.bold]}>{fixed(lastValue)}</Text>
-          <Text style={[style.caption, style.symbol]}>{symbol}</Text>
-        </View>
-
-        <View style={style.chart}>
-          { values.map((value, index) => (
-            <Bar
-              busy={busy}
-              color={color}
-              key={index.toString()}
-              percentage={value > 0 ? ((value - low) * 100) / (high - low) : undefined}
-              resolution={resolution}
-            />
-          ))}
-        </View>
-
-        <View style={style.row}>
-          <Text style={[style.caption, style.flex]}>{busy ? 'updating...' : now}</Text>
-          { !busy && (
-            <Fragment>
-              <Text style={[style.caption, style.bold, style.low]}>▼{fixed(low)}</Text>
-              <Text style={[style.caption, style.bold, style.high]}>▲{fixed(high)}</Text>
-            </Fragment>
-          )}
-        </View>
-
-        <Text>{error}</Text>
-      </View>
+      </ProviderData>
     );
   }
 }

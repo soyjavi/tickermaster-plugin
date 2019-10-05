@@ -10,15 +10,16 @@ export default StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column-reverse',
-    justifyContent: 'flex-end',
+    flex: 1,
     height: '100%',
+    justifyContent: 'flex-end',
   },
 
   led: {
     backgroundColor: BASE,
     borderRadius: LED_SIZE,
     height: LED_SIZE,
-    margin: 1,
+    marginVertical: 1,
     width: LED_SIZE,
   },
 });
