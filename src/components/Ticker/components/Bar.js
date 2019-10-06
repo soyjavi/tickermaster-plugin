@@ -1,6 +1,6 @@
 import { bool, number, string } from 'prop-types';
 import React, { PureComponent } from 'react';
-import { Animated, View } from 'react-native';
+import { View } from 'react-native';
 
 import { ConsumerData } from '../context/data';
 import style from './Bar.style';
@@ -54,12 +54,12 @@ class Bar extends PureComponent {
 
     const on = Math.floor((percentage * resolution) / 100);
     const leds = Array.from({ length: resolution }, (value, index) => {
-      const style = { opacity: index > on ? 0.15 : 1 };
+      const customStyle = { opacity: index > on ? 0.1 : 1 };
 
-      if (over) style.opacity = index > on ? 0.3 : 1;
-      if (!busy && percentage >= 0) style.backgroundColor = color;
+      if (over) customStyle.opacity = index > on ? 0.5 : 1;
+      if (!busy && percentage >= 0) customStyle.backgroundColor = color;
 
-      return style;
+      return customStyle;
     });
 
     return (
@@ -70,8 +70,7 @@ class Bar extends PureComponent {
             onMouseLeave={percentage ? () => onLeave(context) : undefined}
             style={style.container}
           >
-            { leds.map((styleCustom, index) =>
-              <View key={index.toString()} style={[style.led, styleCustom]} />)}
+            { leds.map((customStyle, index) => <View key={index.toString()} style={[style.led, customStyle]} />)}
           </View>
         )}
       </ConsumerData>

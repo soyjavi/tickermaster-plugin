@@ -9,6 +9,10 @@ export default StyleSheet.create({
     fontWeight: '900',
   },
 
+  busy: {
+    color: STYLE.BASE,
+  },
+
   caption: {
     fontSize: UNIT,
     color: STYLE.LIGHT,
@@ -65,7 +69,6 @@ export default StyleSheet.create({
 
   high: {
     color: STYLE.SUCCESS,
-    marginLeft: UNIT / 2,
   },
 
   value: {

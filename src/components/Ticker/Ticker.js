@@ -120,19 +120,23 @@ class Ticker extends PureComponent {
             { ({ rate: { timestamp, value } = {} }) => (
               <View style={style.row}>
                 <Text style={[style.caption, style.flex]}>{busy ? 'Updating...' : formatDate(timestamp || now)}</Text>
-                { !busy && !timestamp && (
-                  <Fragment>
-                    <Text style={[style.caption, style.bold, style.low]}>{`▼${fixed(low)}`}</Text>
-                    <Text style={[style.caption, style.bold, style.high]}>{`▲${fixed(high)}`}</Text>
-                  </Fragment>
-                )}
-
-                { !busy && timestamp && (
-                  <View style={style.row}>
-                    <Text style={[style.caption, style.bold]}>{fixed(value)}</Text>
-                    <Text style={[style.caption, style.symbol]}>{symbol}</Text>
-                  </View>
-                )}
+                { timestamp
+                  ? (
+                    <View style={style.row}>
+                      <Text style={[style.caption, style.bold]}>{fixed(value)}</Text>
+                      <Text style={[style.caption, style.symbol]}>{symbol}</Text>
+                    </View>
+                  )
+                  : (
+                    <Fragment>
+                      <Text style={[style.caption, style.bold, busy ? style.busy : style.low]}>
+                        {`▼${fixed(low)}`}
+                      </Text>
+                      <Text style={[style.caption, style.bold, busy ? style.busy : style.high]}>
+                        {` ▲${fixed(high)}`}
+                      </Text>
+                    </Fragment>
+                  )}
               </View>
             )}
           </ConsumerData>

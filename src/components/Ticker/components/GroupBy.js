@@ -2,7 +2,7 @@ import { func, string } from 'prop-types';
 import React, { PureComponent } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 
-import { C, fetch, STYLE } from '../../../common';
+import { C } from '../../../common';
 import style from './GroupBy.style';
 
 const { GROUPS } = C;
@@ -22,15 +22,15 @@ class GroupBy extends PureComponent {
 
     return (
       <View style={style.container}>
-        { GROUPS.map((group) =>
-          <TouchableWithoutFeedback onPress={() => onChange(group)}>
+        { GROUPS.map((group) => (
+          <TouchableWithoutFeedback key={group} onPress={() => onChange(group)}>
             <View>
-              <Text key={group} style={[style.item, group === current && style.active]}>
+              <Text style={[style.item, group === current && style.active]}>
                 {group}
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        )}
+        ))}
       </View>
     );
   }
