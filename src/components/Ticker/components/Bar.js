@@ -30,7 +30,9 @@ class Bar extends PureComponent {
 
     if (!state.over) {
       this.setState({ over: true });
-      onRate({ timestamp, value });
+      setTimeout(() => {
+        if (this.state.over) onRate({ timestamp, value });
+      }, 250);
     }
   }
 
@@ -51,13 +53,16 @@ class Bar extends PureComponent {
       },
       state: { over },
     } = this;
+    const hasValue = percentage >= 0;
 
-    const on = Math.floor((percentage * resolution) / 100);
+    const on = Math.round(percentage) === 100 ? resolution - 1 : Math.floor((percentage * resolution) / 100);
+
     const leds = Array.from({ length: resolution }, (value, index) => {
-      const customStyle = { opacity: index > on ? 0.1 : 1 };
+      const customStyle = { opacity: index > on ? 0.1 : 0.35 };
 
-      if (over) customStyle.opacity = index > on ? 0.5 : 1;
-      if (!busy && percentage >= 0) customStyle.backgroundColor = color;
+      if (over) customStyle.opacity = index > on ? 0.25 : 0.55;
+      else if (index === on) customStyle.opacity = 1;
+      if (!busy && hasValue) customStyle.backgroundColor = color;
 
       return customStyle;
     });
@@ -66,8 +71,8 @@ class Bar extends PureComponent {
       <ConsumerData>
         { (context) => (
           <View
-            onMouseEnter={percentage ? () => onEnter(context) : undefined}
-            onMouseLeave={percentage ? () => onLeave(context) : undefined}
+            onMouseEnter={hasValue ? () => onEnter(context) : undefined}
+            onMouseLeave={hasValue ? () => onLeave(context) : undefined}
             style={style.container}
           >
             { leds.map((customStyle, index) => <View key={index.toString()} style={[style.led, customStyle]} />)}
