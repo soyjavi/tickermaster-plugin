@@ -1,7 +1,7 @@
 {
   "name": "tickermaster-plugin",
   "description": "A new expanded and private ticker running on the blockchain.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "dependencies": {
     "expo": "^34.0.1",
     "prop-types": "^15.7.2",
@@ -32,6 +32,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build:web": "expo build:web",
     "test": "node_modules/.bin/jest",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand",
     "eject": "expo eject"

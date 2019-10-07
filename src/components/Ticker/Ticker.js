@@ -17,12 +17,13 @@ class Ticker extends PureComponent {
   static propTypes = {
     base: string,
     group: string,
-    symbol: string.isRequired,
+    symbol: string,
   };
 
   static defaultProps = {
     base: BASE,
     group: DEFAULT_GROUP,
+    symbol: 'EUR',
   };
 
   constructor(props) {
