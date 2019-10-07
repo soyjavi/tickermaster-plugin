@@ -16,17 +16,18 @@ const [DEFAULT_GROUP] = GROUPS;
 class Ticker extends PureComponent {
   static propTypes = {
     base: string,
+    group: string,
     symbol: string.isRequired,
   };
 
   static defaultProps = {
     base: BASE,
+    group: DEFAULT_GROUP,
   };
 
   constructor(props) {
     super(props);
-    // @TODO: We should get last group from storage
-    const group = DEFAULT_GROUP;
+    const { group } = props;
     this.state = {
       busy: false,
       error: undefined,
