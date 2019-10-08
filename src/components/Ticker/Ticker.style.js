@@ -31,6 +31,17 @@ export default StyleSheet.create({
     width: '100%',
   },
 
+  error: {
+    alignSelf: 'center',
+    backgroundColor: STYLE.ERROR,
+    borderRadius: UNIT * 2,
+    color: STYLE.WHITE,
+    paddingVertical: UNIT / 2,
+    paddingHorizontal: UNIT,
+    position: 'absolute',
+    top: UNIT * 12.8,
+  },
+
   flex: {
     flex: 1,
   },

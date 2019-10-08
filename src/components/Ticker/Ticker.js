@@ -56,13 +56,16 @@ class Ticker extends PureComponent {
       rates: group !== state.group ? dummyRates(group) : state.rates,
     });
 
-    const service = `${base}/${symbol}/${group}`;
-    const response = await fetch({ service }).catch((error) => this.setState({ error }));
-    this.setState({
-      busy: false,
-      ...response,
-      rates: { ...response.rates, ...dummyRates(group, Object.keys(response.rates).length) },
-    });
+    let nextState = {};
+    await fetch({ service: `${base}/${symbol}/${group}` })
+      .then((value) => {
+        nextState = { ...value, rates: { ...value.rates, ...dummyRates(group, Object.keys(value.rates).length) } };
+      })
+      .catch((error) => {
+        nextState = { error };
+      });
+
+    this.setState({ busy: false, ...nextState });
   }
 
   render() {
@@ -86,22 +89,24 @@ class Ticker extends PureComponent {
         <View style={[style.container, { maxWidth }]}>
           <View style={style.row}>
             <Text style={[style.title, style.bold]}>{`${base}${symbol}`}</Text>
-            <Text
-              style={[
-                style.progression,
-                style.bold,
-                !busy && progression > 0 && style.high,
-                !busy && progression < 0 && style.low,
-              ]}
-            >
-              {`${progression.toFixed(2)}%`}
-            </Text>
+            { !error && (
+              <Text
+                style={[
+                  style.progression,
+                  style.bold,
+                  !busy && progression > 0 && style.high,
+                  !busy && progression < 0 && style.low,
+                ]}
+              >
+                {`${progression.toFixed(2)}%`}
+              </Text>
+            )}
             <GroupBy current={group} onChange={(item) => this.fetch(item)} />
           </View>
 
           <View style={style.row}>
-            <Text style={[style.value, style.bold]}>{fixed(lastValue)}</Text>
-            <Text style={[style.caption, style.symbol]}>{symbol}</Text>
+            <Text style={[style.value, style.bold, error && style.busy]}>{fixed(lastValue)}</Text>
+            <Text style={[style.caption, style.symbol, error && style.busy]}>{symbol}</Text>
           </View>
 
           <View style={style.chart}>
@@ -121,7 +126,9 @@ class Ticker extends PureComponent {
           <ConsumerData>
             { ({ rate: { timestamp, value } = {} }) => (
               <View style={style.row}>
-                <Text style={[style.caption, style.flex]}>{busy ? 'Updating...' : formatDate(timestamp || now)}</Text>
+                <Text style={[style.caption, style.flex]}>
+                  {busy ? 'Updating...' : formatDate(timestamp || now)}
+                </Text>
                 { timestamp
                   ? (
                     <View style={style.row}>
@@ -131,10 +138,10 @@ class Ticker extends PureComponent {
                   )
                   : (
                     <Fragment>
-                      <Text style={[style.caption, style.bold, busy ? style.busy : style.low]}>
+                      <Text style={[style.caption, style.bold, busy || error ? style.busy : style.low]}>
                         {`▼${fixed(low)}`}
                       </Text>
-                      <Text style={[style.caption, style.bold, busy ? style.busy : style.high]}>
+                      <Text style={[style.caption, style.bold, busy || error ? style.busy : style.high]}>
                         {` ▲${fixed(high)}`}
                       </Text>
                     </Fragment>
@@ -143,7 +150,7 @@ class Ticker extends PureComponent {
             )}
           </ConsumerData>
 
-          <Text>{error}</Text>
+          { error && <Text style={[style.bold, style.error]}>{error.message}</Text>}
         </View>
       </ProviderData>
     );
