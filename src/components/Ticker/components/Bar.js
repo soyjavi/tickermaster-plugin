@@ -60,7 +60,7 @@ class Bar extends PureComponent {
     const leds = Array.from({ length: resolution }, (value, index) => {
       const customStyle = { opacity: index > on ? 0.1 : 0.35 };
 
-      if (over) customStyle.opacity = index > on ? 0.25 : 0.55;
+      if (over) customStyle.opacity = index > on ? 0.25 : 1;
       else if (index === on) customStyle.opacity = 1;
       if (!busy && hasValue) customStyle.backgroundColor = color;
 
