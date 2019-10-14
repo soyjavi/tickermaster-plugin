@@ -10,8 +10,7 @@ import {
 import { ConsumerData, ProviderData } from './context/data';
 import style from './Ticker.style';
 
-const { BASE, GROUPS } = C;
-const [DEFAULT_GROUP] = GROUPS;
+const { BASE, DEFAULT_GROUP } = C;
 
 class Ticker extends PureComponent {
   static propTypes = {

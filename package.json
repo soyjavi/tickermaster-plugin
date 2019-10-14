@@ -1,7 +1,7 @@
 {
   "name": "tickermaster-plugin",
   "description": "A new expanded and private ticker running on the blockchain.",
-  "version": "0.3.2",
+  "version": "0.5.0",
   "dependencies": {
     "expo": "^34.0.1",
     "prop-types": "^15.7.2",
